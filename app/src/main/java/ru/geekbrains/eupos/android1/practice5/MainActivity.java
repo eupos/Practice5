@@ -169,7 +169,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     numberField.setText(numberField.getText().subSequence(0,numberField.getText().length()-1));
                 break;
             case R.id.toggleButton:
-                if
+                // включена ли кнопка
+                boolean on = ((ToggleButton) view).isChecked();
+                if (on) {
+                    // действия если включена
+
+                } else {
+                    // действия, если выключена
+
+                }
             default:
                 throw new IllegalStateException("Unexpected value: " + view.getId());
         }
