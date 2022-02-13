@@ -1,11 +1,8 @@
 package ru.geekbrains.eupos.android1.practice5;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatToggleButton;
-
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +11,10 @@ import android.widget.ToggleButton;
 
 import java.text.DecimalFormat;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener  {
+
+    private static final String PREF_NAME = "key_pref";
+    private static final String PREF_THEME_KEY = "key_pref_theme";
 
     private Compute compute = new Compute();
 
@@ -46,25 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(getAppTheme());
         setContentView(R.layout.activity_main);
         initView ();
         initLister ();
         this.setTitle("Калькулятор");
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("compute", (Parcelable) compute);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        compute = savedInstanceState.getParcelable("compute");
-        resultField.setText(String.format("id", compute.getValueOne()));
-        operationField.setText(String.format("id", compute.getOp()));
-        numberField.setText(String.format("id", compute.getValueTwo()));
     }
 
     private void initLister() {
@@ -116,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toggleButton = findViewById(R.id.toggleButton);
     }
 
-
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
 
@@ -168,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(numberField.getText().length()>0)
                     numberField.setText(numberField.getText().subSequence(0,numberField.getText().length()-1));
                 break;
-            case R.id.toggleButton:
+ /*           case R.id.toggleButton:
                 // включена ли кнопка
                 boolean on = ((ToggleButton) view).isChecked();
                 if (on) {
@@ -177,10 +163,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     // действия, если выключена
 
-                }
+                }*/
             default:
                 throw new IllegalStateException("Unexpected value: " + view.getId());
         }
+        recreate();
     }
 
     private void inputNumb(){
@@ -188,5 +175,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         operationField.setText(compute.getOp());
         resultField.setText(decimalFormat.format(compute.getValueOne()));
         numberField.setText("");
+    }
+
+    protected void setAppTheme(int codeStyle) {
+        SharedPreferences sharedPref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(PREF_THEME_KEY, codeStyle);
+        editor.apply();
+    }
+
+    protected int getAppTheme() {
+        SharedPreferences sharedPref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        return sharedPref.getInt(PREF_THEME_KEY,R.style.AppThemeLight);
     }
 }
