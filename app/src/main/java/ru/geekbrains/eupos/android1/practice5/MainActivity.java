@@ -154,16 +154,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener  
                 if(numberField.getText().length()>0)
                     numberField.setText(numberField.getText().subSequence(0,numberField.getText().length()-1));
                 break;
- /*           case R.id.toggleButton:
+            case R.id.toggleButton:
                 // включена ли кнопка
                 boolean on = ((ToggleButton) view).isChecked();
                 if (on) {
                     // действия если включена
-
+                    setAppTheme(R.style.AppThemeDark);
                 } else {
                     // действия, если выключена
-
-                }*/
+                    setAppTheme(R.style.AppThemeLight);
+                }
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + view.getId());
         }
